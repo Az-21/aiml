@@ -1,9 +1,11 @@
-﻿namespace Apriori;
+﻿using Apriori.Configuration;
+
+namespace Apriori;
 
 internal static class Program
 {
   static void Main()
   {
-    Console.WriteLine("Hello, World!");
+    Config config = Configuration.Read.Config();
   }
 }
