@@ -3,7 +3,13 @@
 namespace Apriori.Algorithm;
 internal static class Frequency
 {
-  internal static Dictionary<string, int> OfIndividualItems(in Config config)
+  internal static Dictionary<string, int> OfIndividualItemsWithMinimumThreshold(in Config config)
+  {
+    Dictionary<string, int> items = Frequency.OfIndividualItems(in config);
+    return Frequency.PruneBasedOnThreshold(in items, in config);
+  }
+
+  private static Dictionary<string, int> OfIndividualItems(in Config config)
   {
     // Dictionary with k:Item, v:Frequency
     Dictionary<string, int> items = new();
@@ -25,5 +31,18 @@ internal static class Frequency
     }
 
     return items;
+  }
+
+  private static Dictionary<string, int> PruneBasedOnThreshold(in Dictionary<string, int> items, in Config config)
+  {
+    Dictionary<string, int> pruned = new();
+    foreach (KeyValuePair<string, int> kvp in items)
+    {
+      if (kvp.Value < config.MinimumFrequency) { continue; }
+      // Add to pruned dictionary if the item has the minimum desired frequency
+      pruned.Add(kvp.Key, kvp.Value);
+    }
+
+    return pruned;
   }
 }

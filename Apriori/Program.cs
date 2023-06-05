@@ -11,7 +11,7 @@ internal static class Program
     Config config = Configuration.Read.Config();
 
     // Get frequency of individual items => Prune based on minimum frequency
-    Dictionary<string, int> items = Frequency.OfIndividualItems(in config);
+    Dictionary<string, int> items = Frequency.OfIndividualItemsWithMinimumThreshold(in config);
 
   }
 }
