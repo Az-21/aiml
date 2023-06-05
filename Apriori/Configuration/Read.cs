@@ -2,7 +2,14 @@
 
 namespace Apriori.Configuration;
 
-public readonly record struct Config(string DataSource, int MinimumFrequency);
+public readonly record struct Config(
+  string DataSource,
+  int MinimumFrequency,
+  double MinimumSupport,
+  double MinimumConfidence,
+  double MinimumLift
+ );
+
 internal static class Read
 {
   public static Config Config()
