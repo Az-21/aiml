@@ -1,5 +1,6 @@
 ﻿using Apriori.Algorithm;
 using Apriori.Configuration;
+using Spectre.Console;
 
 namespace Apriori;
 
@@ -58,12 +59,15 @@ internal static class Program
       // Print subset rule in A => B format
       string a = "{ " + string.Join(", ", subsetA) + " }";
       string b = subsetAB.Last();
-      Console.WriteLine($"{a} => {b}");
+      AnsiConsole.MarkupLine($"\n[green]{a}[/] [red]=>[/] [blue]{b}[/]");
 
       // Print analysis results
       Console.WriteLine($"Support = {supportAB}");
       Console.WriteLine($"Confidence = {confidence}");
       Console.WriteLine($"Lift = {lift}\n");
+
+      // Separator
+      AnsiConsole.Write(new Rule());
     }
   }
 }
