@@ -1,6 +1,7 @@
 ﻿using Apriori.Algorithm;
 using Apriori.Configuration;
 using Spectre.Console;
+using System.Globalization;
 
 namespace Apriori;
 
@@ -59,6 +60,8 @@ internal static class Program
       // Print subset rule in A => B format
       string a = "{ " + string.Join(", ", subsetA) + " }";
       string b = subsetAB.Last();
+      a = ToTitleCase(a);
+      b = ToTitleCase(b);
       AnsiConsole.MarkupLine($"\n[green]{a}[/] [red]=>[/] [blue]{b}[/]");
 
       // Print analysis results
@@ -69,5 +72,11 @@ internal static class Program
       // Separator
       AnsiConsole.Write(new Rule());
     }
+  }
+
+  private static string ToTitleCase(string input)
+  {
+    TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
+    return textInfo.ToTitleCase(input);
   }
 }
