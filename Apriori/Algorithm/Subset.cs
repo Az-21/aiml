@@ -1,6 +1,8 @@
 ﻿namespace Apriori.Algorithm;
 internal static class Subset
 {
+  // Note: This function is the performance limiting part of this program
+  // It does not prune supersets if the subset itself does not satisfy the minimum threshold
   internal static Dictionary<HashSet<string>, int> Generate(in Dictionary<string, int> input)
   {
     Dictionary<HashSet<string>, int> subsets = new(HashSet<string>.CreateSetComparer())
