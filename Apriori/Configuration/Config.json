@@ -1,7 +1,7 @@
 {
   "DataSource": "C:\\Dev\\Dataset\\Apriori\\store_data.csv",
-  "MinimumFrequency": 500,
-  "MinimumSupport": 0.5,
-  "MinimumConfidence": 0,
+  "MinimumFrequency": 800,
+  "MinimumSupport": 0,
+  "MinimumConfidence": 0.4,
   "MinimumLift": 0
 }
