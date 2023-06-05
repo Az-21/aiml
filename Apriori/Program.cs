@@ -32,15 +32,22 @@ internal static class Program
       // Split subset into {A} || {B} = {x1, x2, ..., xN-1} || {xN}
       HashSet<string> subsetAB = subset.Key;
       HashSet<string> subsetA = new(subsetAB.Take(subsetAB.Count - 1));
+      HashSet<string> subsetB = new(subsetAB.Skip(subsetAB.Count - 1));
 
       // Calculate analysis indicators
-      double support = Calculate.Support(subsetAB.Count, in transactions);
-      double confidence = Calculate.Confidence(subsetAB.Count, subsetA.Count);
-      double lift = Calculate.Lift(in confidence, in support);
+      int frequencyA = subsets[subsetA];
+      int frequencyB = subsets[subsetB];
+      int frequencyAB = subsets[subsetAB];
+
+      double supportA = Calculate.Support(frequencyA, in transactions);
+      double supportB = Calculate.Support(frequencyB, in transactions);
+      double supportAB = Calculate.Support(frequencyAB, in transactions);
+      double confidence = Calculate.Confidence(in supportAB, in supportA);
+      double lift = Calculate.Lift(in confidence, in supportB);
 
       // Skip low scoring rules
       bool isLowScoring =
-        support < config.MinimumSupport ||
+        supportAB < config.MinimumSupport ||
         confidence < config.MinimumConfidence ||
         lift < config.MinimumLift;
       if (isLowScoring) { continue; }
@@ -51,7 +58,7 @@ internal static class Program
       Console.WriteLine($"{a} => {b}");
 
       // Print analysis results
-      Console.WriteLine($"Support = {support}");
+      Console.WriteLine($"Support = {supportAB}");
       Console.WriteLine($"Confidence = {confidence}");
       Console.WriteLine($"Lift = {lift}\n");
     }
