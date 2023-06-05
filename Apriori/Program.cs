@@ -33,16 +33,24 @@ internal static class Program
       HashSet<string> subsetAB = subset.Key;
       HashSet<string> subsetA = new(subsetAB.Take(subsetAB.Count - 1));
 
-      // Print subset rule in A => B format
-      string a = "{ " + string.Join(", ", subsetA) + " }";
-      string b = subsetAB.Last();
-      Console.WriteLine($"{a} => {b}");
-
       // Calculate analysis indicators
       double support = Calculate.Support(subsetAB.Count, in transactions);
       double confidence = Calculate.Confidence(subsetAB.Count, subsetA.Count);
       double lift = Calculate.Lift(in confidence, in support);
 
+      // Skip low scoring rules
+      bool isLowScoring =
+        support < config.MinimumSupport ||
+        confidence < config.MinimumConfidence ||
+        lift < config.MinimumLift;
+      if (isLowScoring) { continue; }
+
+      // Print subset rule in A => B format
+      string a = "{ " + string.Join(", ", subsetA) + " }";
+      string b = subsetAB.Last();
+      Console.WriteLine($"{a} => {b}");
+
+      // Print analysis results
       Console.WriteLine($"Support = {support}");
       Console.WriteLine($"Confidence = {confidence}");
       Console.WriteLine($"Lift = {lift}\n");
