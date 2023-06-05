@@ -19,8 +19,8 @@ internal static class Program
     // Get frequency of all subsets from the original CSV
     Frequency.UpdateFrequencyInplace(ref subsets, in config);
 
-    // Get total number of transactions
-    int transactions = Frequency.CountNonEmptyLines(in config);
+    // Total number of transactions | Empty/null set contains number of lines
+    int transactions = subsets[new HashSet<string>()];
 
     // Calculate support, confidence, and list
     Console.WriteLine();

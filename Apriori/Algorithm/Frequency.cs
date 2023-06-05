@@ -68,18 +68,4 @@ internal static class Frequency
       }
     }
   }
-
-  internal static int CountNonEmptyLines(in Config config)
-  {
-    int lineCount = 0;
-    string line;
-    using StreamReader reader = File.OpenText(config.DataSource);
-    while ((line = reader.ReadLine()!) != null)
-    {
-      line = line.Trim();
-      if (!string.IsNullOrEmpty(line)) { lineCount++; }
-    }
-
-    return lineCount;
-  }
 }
