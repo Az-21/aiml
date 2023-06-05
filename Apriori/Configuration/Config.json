@@ -1,4 +1,4 @@
 {
-  "DataSource": "C:\\Dev\\Dataset\\Apriori\\mini.csv",
-  "MinimumFrequency":  5
+  "DataSource": "C:\\Dev\\Dataset\\Apriori\\store_data.csv",
+  "MinimumFrequency":  500
 }
