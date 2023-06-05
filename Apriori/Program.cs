@@ -15,5 +15,8 @@ internal static class Program
 
     // Generate all possible subsets from the pruned items dictionary
     Dictionary<HashSet<string>, int> subsets = Subset.Generate(items);
+
+    // Get frequency of all subsets from the original CSV
+    Frequency.UpdateFrequencyInplace(ref subsets, in config);
   }
 }
