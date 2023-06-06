@@ -34,41 +34,48 @@ internal static class Program
       // Ignore subsets which lower than threshold frequency
       if (subset.Value < config.MinimumFrequency) { continue; }
 
-      // Split subset into {A} || {B} = {x1, x2, ..., xN-1} || {xN}
-      HashSet<string> subsetAB = subset.Key;
-      HashSet<string> subsetA = new(subsetAB.Take(subsetAB.Count - 1));
-      HashSet<string> subsetB = new(subsetAB.Skip(subsetAB.Count - 1));
+      // Create subsets of subset
+      HashSet<HashSet<string>> innerSubsets = Subset.GenerateX(subset.Key);
+      foreach (HashSet<string> innerSubset in innerSubsets)
+      {
+        // Calculate A => B rule given AB
+        HashSet<string> ruleA = innerSubset; // X Y Z
+        HashSet<string> ruleB = new(subset.Key); // U X Y Z V
+        ruleB.ExceptWith(ruleA); // U V
 
-      // Calculate analysis indicators
-      int frequencyA = subsets[subsetA];
-      int frequencyB = subsets[subsetB];
-      int frequencyAB = subsets[subsetAB];
+        // Skip empty rules
+        if (ruleA.Count == 0 || ruleB.Count == 0) { continue; }
 
-      double supportA = Calculate.Support(frequencyA, in transactions);
-      double supportB = Calculate.Support(frequencyB, in transactions);
-      double supportAB = Calculate.Support(frequencyAB, in transactions);
-      double confidence = Calculate.Confidence(in supportAB, in supportA);
-      double lift = Calculate.Lift(in confidence, in supportB);
+        // Calculate analysis indicators
+        int frequencyA = subsets[ruleA];
+        int frequencyB = subsets[ruleB];
+        int frequencyAB = subsets[subset.Key];
 
-      // Skip low scoring rules
-      bool isLowScoring =
-        supportAB < config.MinimumSupport ||
-        confidence < config.MinimumConfidence ||
-        lift < config.MinimumLift;
-      if (isLowScoring) { continue; }
+        double supportA = Calculate.Support(frequencyA, in transactions);
+        double supportB = Calculate.Support(frequencyB, in transactions);
+        double supportAB = Calculate.Support(frequencyAB, in transactions);
+        double confidence = Calculate.Confidence(in supportAB, in supportA);
+        double lift = Calculate.Lift(in confidence, in supportB);
 
-      // Print subset rule in A => B format
-      string a = "{ " + string.Join(", ", subsetA) + " }";
-      string b = subsetAB.Last();
-      a = ToTitleCase(a);
-      b = ToTitleCase(b);
-      AnsiConsole.MarkupLine($"\n[green]{a}[/] [red]=>[/] [blue]{b}[/]");
+        // Skip low scoring rules
+        bool isLowScoring =
+          supportAB < config.MinimumSupport ||
+          confidence < config.MinimumConfidence ||
+          lift < config.MinimumLift;
+        if (isLowScoring) { continue; }
 
-      // Print analysis results
-      Console.WriteLine($"Support = {supportAB}");
-      Console.WriteLine($"Confidence = {confidence}");
-      Console.WriteLine($"Lift = {lift}\n");
+        // Print subset rule in A => B format
+        string a = "{ " + string.Join(", ", ruleA) + " }";
+        string b = "{ " + string.Join(", ", ruleB) + " }";
+        a = ToTitleCase(a);
+        b = ToTitleCase(b);
+        AnsiConsole.MarkupLine($"\n[green]{a}[/] [red]=>[/] [blue]{b}[/]");
 
+        // Print analysis results
+        Console.WriteLine($"Support = {supportAB}");
+        Console.WriteLine($"Confidence = {confidence}");
+        Console.WriteLine($"Lift = {lift}\n");
+      }
       // Separator
       AnsiConsole.Write(new Rule());
     }
