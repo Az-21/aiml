@@ -7,14 +7,13 @@ internal static class Subset
   {
     Dictionary<HashSet<string>, int> subsets = new(HashSet<string>.CreateSetComparer())
     {
-      { new HashSet<string>(), 0 }
+        { new HashSet<string>(), 0 }
     };
 
-    // Generate subsets
     foreach (var item in input)
     {
       int count = item.Value;
-      foreach (HashSet<string> subset in (HashSet<HashSet<string>>)new(subsets.Keys, HashSet<string>.CreateSetComparer()))
+      foreach (var subset in subsets.Keys.ToList())
       {
         for (int i = 1; i <= count; i++)
         {
