@@ -35,8 +35,7 @@ internal static class Program
       if (subset.Value < config.MinimumFrequency) { continue; }
 
       // Create subsets of subset
-      HashSet<HashSet<string>> innerSubsets = Subset.GenerateX(subset.Key);
-      foreach (HashSet<string> innerSubset in innerSubsets)
+      foreach (HashSet<string> innerSubset in Subset.GenerateX(subset.Key))
       {
         // Calculate A => B rule given AB
         HashSet<string> ruleA = innerSubset; // X Y Z
