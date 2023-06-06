@@ -34,6 +34,10 @@ internal static class Program
       // Ignore subsets which lower than threshold frequency
       if (subset.Value < config.MinimumFrequency) { continue; }
 
+      // Print outer rule AB
+      string outerRule = "{ " + string.Join(", ", subset.Key) + " }";
+      AnsiConsole.MarkupLine($"\nSubset\n[purple]{outerRule}[/]");
+
       // Create subsets of subset
       foreach (HashSet<string> innerSubset in Subset.GenerateX(subset.Key))
       {
