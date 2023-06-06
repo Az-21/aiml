@@ -68,4 +68,21 @@ internal static class Frequency
       }
     }
   }
+
+  internal static HashSet<HashSet<string>> HashCsvLines(in Config config)
+  {
+    HashSet<HashSet<string>> hashedCsv = new();
+    using StreamReader reader = new(config.DataSource);
+    string line;
+    while ((line = reader.ReadLine()!) is not null)
+    {
+      // Pre-process line
+      line = line.Trim().ToLowerInvariant();
+
+      // Convert line to hash set
+      HashSet<string> lineItems = new(line.Split(','));
+    }
+
+    return hashedCsv;
+  }
 }
