@@ -3,13 +3,14 @@
 namespace Apriori.Algorithm;
 internal static class Frequency
 {
-  internal static Dictionary<string, int> OfIndividualItemsWithMinimumThreshold(in HashSet<HashSet<string>> hashedCsv, in Config config)
+  internal static Dictionary<string, int> OfIndividualItems(in HashSet<HashSet<string>> hashedCsv, in Config config)
   {
-    Dictionary<string, int> items = Frequency.OfIndividualItems(in hashedCsv, in config);
+    Dictionary<string, int> items = Frequency.OfSingleItems(in hashedCsv);
+    if (config.UseRuleSet) { items = Frequency.PruneBasedOnRuleSet(in items, in config); }
     return Frequency.PruneBasedOnThreshold(in items, in config);
   }
 
-  private static Dictionary<string, int> OfIndividualItems(in HashSet<HashSet<string>> hashedCsv, in Config config)
+  private static Dictionary<string, int> OfSingleItems(in HashSet<HashSet<string>> hashedCsv)
   {
     // Dictionary with k:Item, v:Frequency
     Dictionary<string, int> items = new();
@@ -24,6 +25,21 @@ internal static class Frequency
     }
 
     return items;
+  }
+
+  private static Dictionary<string, int> PruneBasedOnRuleSet(in Dictionary<string, int> items, in Config config)
+  {
+    Dictionary<string, int> pruned = new();
+    HashSet<string> ruleSet = new(config.RuleSet.Split(','));
+
+    foreach (KeyValuePair<string, int> kvp in items)
+    {
+      if (!ruleSet.Contains(kvp.Key)) { continue; }
+      // Add to pruned dictionary is present in user-defined ruleset
+      pruned.Add(kvp.Key, kvp.Value);
+    }
+
+    return pruned;
   }
 
   private static Dictionary<string, int> PruneBasedOnThreshold(in Dictionary<string, int> items, in Config config)

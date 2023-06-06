@@ -16,7 +16,7 @@ internal static class Program
     HashSet<HashSet<string>> hashedCsv = Frequency.HashCsvLines(in config);
 
     // Get frequency of individual items => Prune based on minimum frequency
-    Dictionary<string, int> items = Frequency.OfIndividualItemsWithMinimumThreshold(in hashedCsv, in config);
+    Dictionary<string, int> items = Frequency.OfIndividualItems(in hashedCsv, in config);
 
     // Generate all possible subsets from the pruned items dictionary
     Dictionary<HashSet<string>, int> subsets = Subset.Generate(items);
