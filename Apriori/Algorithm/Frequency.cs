@@ -3,27 +3,20 @@
 namespace Apriori.Algorithm;
 internal static class Frequency
 {
-  internal static Dictionary<string, int> OfIndividualItemsWithMinimumThreshold(in Config config)
+  internal static Dictionary<string, int> OfIndividualItemsWithMinimumThreshold(in HashSet<HashSet<string>> hashedCsv, in Config config)
   {
-    Dictionary<string, int> items = Frequency.OfIndividualItems(in config);
+    Dictionary<string, int> items = Frequency.OfIndividualItems(in hashedCsv, in config);
     return Frequency.PruneBasedOnThreshold(in items, in config);
   }
 
-  private static Dictionary<string, int> OfIndividualItems(in Config config)
+  private static Dictionary<string, int> OfIndividualItems(in HashSet<HashSet<string>> hashedCsv, in Config config)
   {
     // Dictionary with k:Item, v:Frequency
     Dictionary<string, int> items = new();
 
-    // Read CSV line-by-line => Update items dictionary
-    using StreamReader reader = new(config.DataSource);
-    string line;
-    while ((line = reader.ReadLine()!) is not null)
+    foreach (HashSet<string> line in hashedCsv)
     {
-      // Pre-process line
-      line = line.Trim().ToLowerInvariant();
-
-      // Append comma separated values to items dictionary
-      foreach (string item in line.Split(','))
+      foreach (string item in line)
       {
         if (items.ContainsKey(item)) { items[item]++; }
         else { items.Add(item, 1); }
@@ -46,25 +39,15 @@ internal static class Frequency
     return pruned;
   }
 
-  internal static void UpdateFrequencyInplace(ref Dictionary<HashSet<string>, int> subsets, in Config config)
+  internal static void UpdateFrequencyInplace(ref Dictionary<HashSet<string>, int> subsets, in HashSet<HashSet<string>> hashedCsv)
   {
-    // Read CSV line-by-line => Update subset dictionary
-    using StreamReader reader = new(config.DataSource);
-    string line;
-    while ((line = reader.ReadLine()!) is not null)
+    // Check for occurance of subset in current line
+    foreach (KeyValuePair<HashSet<string>, int> subset in subsets)
     {
-      // Pre-process line
-      line = line.Trim().ToLowerInvariant();
-
-      // Convert line to hash set
-      HashSet<string> lineItems = new(line.Split(','));
-
-      // Check for occurance of subset in current line
-      foreach (KeyValuePair<HashSet<string>, int> subset in subsets)
+      HashSet<string> subsetItems = subset.Key;
+      foreach (HashSet<string> line in hashedCsv)
       {
-        HashSet<string> subsetItems = subset.Key;
-        if (!subsetItems.IsSubsetOf(lineItems)) { continue; }
-        subsets[subsetItems]++; // Increment the count in the primary dictionary
+        if (subsetItems.IsSubsetOf(line)) { subsets[subsetItems]++; }
       }
     }
   }
@@ -79,8 +62,8 @@ internal static class Frequency
       // Pre-process line
       line = line.Trim().ToLowerInvariant();
 
-      // Convert line to hash set
-      HashSet<string> lineItems = new(line.Split(','));
+      // Convert line to hash set => Add to hashList
+      hashedCsv.Add(new(line.Split(',')));
     }
 
     return hashedCsv;

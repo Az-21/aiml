@@ -12,14 +12,17 @@ internal static class Program
     // Load parameters
     Config config = Configuration.Read.Config();
 
+    // Generate CSV hash
+    HashSet<HashSet<string>> hashedCsv = Frequency.HashCsvLines(in config);
+
     // Get frequency of individual items => Prune based on minimum frequency
-    Dictionary<string, int> items = Frequency.OfIndividualItemsWithMinimumThreshold(in config);
+    Dictionary<string, int> items = Frequency.OfIndividualItemsWithMinimumThreshold(in hashedCsv, in config);
 
     // Generate all possible subsets from the pruned items dictionary
     Dictionary<HashSet<string>, int> subsets = Subset.Generate(items);
 
     // Get frequency of all subsets from the original CSV
-    Frequency.UpdateFrequencyInplace(ref subsets, in config);
+    Frequency.UpdateFrequencyInplace(ref subsets, in hashedCsv);
 
     // Total number of transactions | Empty/null set contains number of lines
     int transactions = subsets[new HashSet<string>()];
