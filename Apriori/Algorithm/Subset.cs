@@ -25,4 +25,25 @@ internal static class Subset
 
     return subsets;
   }
+
+  internal static HashSet<HashSet<string>> GenerateX(in HashSet<string> input)
+  {
+    HashSet<HashSet<string>> subsets = new(HashSet<string>.CreateSetComparer())
+    {
+        new HashSet<string>()
+    };
+
+    foreach (var item in input)
+    {
+      HashSet<HashSet<string>> newSubsets = new HashSet<HashSet<string>>(subsets, HashSet<string>.CreateSetComparer());
+      foreach (var subset in subsets)
+      {
+        HashSet<string> newSubset = new HashSet<string>(subset) { item };
+        newSubsets.Add(newSubset);
+      }
+      subsets = newSubsets;
+    }
+
+    return subsets;
+  }
 }
