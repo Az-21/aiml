@@ -5,6 +5,8 @@ namespace Apriori.Configuration;
 
 public readonly record struct Config(
   string DataSource,
+  string RuleSet,
+  bool UseRuleSet,
   int MinimumFrequency,
   double MinimumSupport,
   double MinimumConfidence,
@@ -39,6 +41,8 @@ internal static class Read
       .AddRow("Minimum support", config.MinimumSupport.ToString())
       .AddRow("Minimum confidence", config.MinimumConfidence.ToString())
       .AddRow("Minimum lift", config.MinimumLift.ToString());
+
+    if (config.UseRuleSet) { table.AddRow("Rule set", config.RuleSet); }
 
     table.Border(TableBorder.Rounded);
     AnsiConsole.Write(table);
