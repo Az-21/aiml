@@ -33,12 +33,12 @@ internal static class Subset
         new HashSet<string>()
     };
 
-    foreach (var item in input)
+    foreach (string item in input)
     {
-      HashSet<HashSet<string>> newSubsets = new HashSet<HashSet<string>>(subsets, HashSet<string>.CreateSetComparer());
+      HashSet<HashSet<string>> newSubsets = new(subsets, HashSet<string>.CreateSetComparer());
       foreach (var subset in subsets)
       {
-        HashSet<string> newSubset = new HashSet<string>(subset) { item };
+        HashSet<string> newSubset = new(subset) { item };
         newSubsets.Add(newSubset);
       }
       subsets = newSubsets;
