@@ -36,7 +36,7 @@ internal static class Program
 
       // Print outer rule AB
       string outerRule = "{ " + string.Join(", ", subset.Key) + " }";
-      AnsiConsole.MarkupLine($"\nSubset\n[purple]{outerRule}[/]");
+      AnsiConsole.MarkupLine($"\nSubset [purple]{outerRule}[/] with f = {subset.Value}");
 
       // Create subsets of subset
       foreach (HashSet<string> innerSubset in Subset.GenerateX(subset.Key))
