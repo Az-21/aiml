@@ -31,8 +31,8 @@ internal static class Program
       // Ignore sets with one item (basket analysis does not apply)
       if (subset.Key.Count <= 1) { continue; } // <=1 to account for null subset
 
-      // Ignore sets which don't exist in CSV (will throw div by 0 error)
-      if (subset.Value == 0) { continue; }
+      // Ignore subsets which lower than threshold frequency
+      if (subset.Value < config.MinimumFrequency) { continue; }
 
       // Split subset into {A} || {B} = {x1, x2, ..., xN-1} || {xN}
       HashSet<string> subsetAB = subset.Key;
