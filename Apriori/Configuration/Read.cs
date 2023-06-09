@@ -37,7 +37,6 @@ internal static class Read
       .AddColumn("[green]Attribute[/]")
       .AddColumn("[green]Value[/]")
       .AddRow("Data source", config.DataSource)
-      .AddRow("Minimum frequency", config.MinimumFrequency.ToString())
       .AddRow("Minimum support", config.MinimumSupport.ToString())
       .AddRow("Minimum confidence", config.MinimumConfidence.ToString())
       .AddRow("Minimum lift", config.MinimumLift.ToString());
