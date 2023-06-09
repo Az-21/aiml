@@ -1,9 +1,8 @@
 {
-  "DataSource": "C:\\Dev\\Dataset\\Apriori\\store_data.csv",
+  "DataSource": "C:\\Dev\\Dataset\\Apriori\\mini.csv",
   "RuleSet": "mineral water,milk,energy bar,whole wheat rice,green tea",
-  "UseRuleSet": true,
-  "MinimumFrequency": 100,
-  "MinimumSupport": 0,
-  "MinimumConfidence": 0,
+  "UseRuleSet": false,
+  "MinimumSupport": 0.5,
+  "MinimumConfidence": 0.7,
   "MinimumLift": 0
 }

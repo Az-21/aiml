@@ -10,10 +10,14 @@ internal static class Program
   static void Main()
   {
     // Load parameters
-    Config config = Configuration.Read.Config();
+    Config rawConfig = Configuration.Read.Config();
 
     // Generate CSV hash
-    HashSet<HashSet<string>> hashedCsv = Frequency.HashCsvLines(in config);
+    HashSet<HashSet<string>> hashedCsv = Frequency.HashCsvLines(in rawConfig);
+    Config config = rawConfig with
+    {
+      MinimumFrequency = (int)(rawConfig.MinimumSupport * hashedCsv.Count)
+    };
 
     // Get frequency of individual items => Prune based on minimum frequency
     Dictionary<string, int> items = Frequency.OfIndividualItems(in hashedCsv, in config);
