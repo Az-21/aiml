@@ -45,6 +45,9 @@ internal static class Program
       string outerRule = "{ " + string.Join(", ", subset.Key) + " }";
       AnsiConsole.MarkupLine($"\nSubset [purple]{outerRule}[/] with f = {subset.Value}");
 
+      // Flag to track whether at least one association rule exists
+      bool isRule = false;
+
       // Create subsets of subset
       foreach (HashSet<string> innerSubset in Subset.GenerateX(subset.Key))
       {
@@ -74,6 +77,9 @@ internal static class Program
           lift < config.MinimumLift;
         if (isLowScoring) { continue; }
 
+        // Reaching here implies at least one association rule exists
+        isRule = true;
+
         // Print subset rule in A => B format
         string a = "{ " + string.Join(", ", ruleA) + " }";
         string b = "{ " + string.Join(", ", ruleB) + " }";
@@ -86,6 +92,9 @@ internal static class Program
         Console.WriteLine($"Confidence = {confidence}");
         Console.WriteLine($"Lift = {lift}\n");
       }
+      // If no inner subset generates an association rule
+      if (!isRule) { Console.WriteLine($"No association rule in set {outerRule} satisfies the minimum constraints\n"); }
+
       // Separator
       AnsiConsole.Write(new Rule());
     }
